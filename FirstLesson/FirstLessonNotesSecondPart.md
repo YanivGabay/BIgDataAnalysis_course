@@ -283,3 +283,164 @@ students.cost + 6  new_cost
 FROM table1 students
 ORDER BY 1
 ```
+
+- we can use comments:
+```
+SELECT 1 c1, -- comment 1
+        2 c2, -- comment 2
+        3 c3  /* and also this
+        is supported.. */
+
+```
+- above example, will create a table with c1,c2,c3 cols, with 1,2,3 with values to each responding col (page 53)
+
+- Types
+```
+SELECT NULL,    -- type: NULL
+        17,      -- type: INTEGER - signed integer
+        -56,     -- type: INTEGER - signed integer
+        23.48,   -- type: REAL - floating point value
+        'Hi',    -- type: TEXT - text string
+        x'0500'  -- type: BLOB
+
+```
+- will create col names and values as following above
+
+- BOOL
+```
+SELECT 'a' = 'a'       c1,
+'b' = 'c'       c2,
+'s' != 't'      c3,
+'r' = NULL      c4,
+'u' != NULL     c5,
+NULL = NULL     c6,
+'a' IS 'a'      c7,
+'b' IS 'c'      c8,
+'s' IS NOT 't'  c9,
+'r' IS NULL     c10,
+'u' IS NOT NULL c11,
+NULL IS NULL    c12
+SQL: Bool / Null - Example #46 - A:
+SELECT 'a' = 'a'       c1,
+'b' = 'c'       c2,
+'s' != 't'      c3,
+'r' = NULL      c4,
+'u' != NULL     c5,
+NULL = NULL     c6,
+'a' IS 'a'      c7,
+'b' IS 'c'      c8,
+'s' IS NOT 't'  c9,
+'r' IS NULL     c10,
+'u' IS NOT NULL c11,
+NULL IS NULL    c12
+c1 c2 c3 c4 c5 c6 c7 c8 c9 c10 c11 c12
+1 0 1 None None None 1 0 1 0 1 1
+```
+- results:
+```
+c1 c2 c3 c4 c5 c6 c7 c8 c9 c10 c11 c12
+1 0 1 None None None 1 0 1 0 1 1
+```
+- so with = and null, it always return null.
+- if we want it to return true false etc, we should use IS
+
+
+```
+SELECT 1 = 1      c1,
+    1 = 7      c2,
+    1 != 7     c3,
+    1 <> 7     c4,
+    NOT 1 = 7  c5
+```
+
+- Casting in SQL
+```
+SELECT CAST('1' AS INTEGER)    c1,
+CAST('12ab' AS INTEGER) c2,
+CAST('cd34' AS INTEGER) c3,
+CAST('ef' AS INTEGER)   c4,
+CAST(1.12 AS INTEGER)   c4,
+CAST(1.99 AS INTEGER)   c6,
+ROUND(1.12)             r1,
+ROUND(1.99)             r2,
+CAST('1' AS REAL)       f1,
+CAST('-1.23' AS REAL)   f2,
+CAST(2 AS REAL)         f3,
+CAST(11 AS TEXT)        t1,
+CAST(12.2 AS TEXT)      t2
+```
+- results:
+- pay attenion, when we convert to int, he stopped at the first char so  12ab turn into 12.
+- casting int ef into 0 (no numbers)
+- casting int cd34 into 0 (found a char so finished)
+```
+c1 c2 c3 c4 c4 c6 r1 r2 f1 f2 f3 t1 t2
+1 12 0 0 1 1 1.0 2.0 1.0 -1.23 2.0 11 12.2
+```
+- round still make it float.
+- '1' as REAL will be 1.0
+
+-math operatos
+```
+SELECT 1+2,
+        2.0+3.0,
+        5-3,
+        3-5
+
+```
+- results:
+```
+
+1+2 2.0+3.0 5-3 3-5
+3 5.0 2 -2
+```
+- math operations are like real life, multiply before adding etc.
+
+- BUILD IN FUNCTIONS
+- abs
+- dividing by 0 gives a null
+- random 
+- round (1.22233,3) will give us 3 numbers after.
+- coalesce (4/0 NULL,'ZZ','YY) will return the first value which isnt NULL
+
+- example with coalesce
+```
+SELECT name,
+coalesce(age, 2022 - birth, 'NA') as fixed_age
+FROM children
+```
+- this will put 'NA' if we have NULL in some values, will return age, if its null than 2022-birth, if that null so NA
+
+
+- instr replace and substr just things to do to strings
+```
+SELECT instr('abcdefghij', 'ef')        instr_1,
+instr('abcdefghij', 'm')         instr_2,
+replace('abcdefghij','de','ZZ')  replace_,
+substr('abcdefghij', 5)          substr_1,
+substr('abcdefghij', 5,3)        substr_2,
+substr('abcdefghij', 5,-3)       substr_3,
+substr('abcdefghij',-5,3)        substr_4,
+substr('abcdefghij',-5,-3)       substr_5
+```
+
+- trim (page 68)
+- can do rtrim only to r 
+- we can also use trim ('  qrsWZqrs','qrs)
+- will only delete the right qrs, cus there are spaces at the start
+
+- mixed example:
+```
+SELECT id*2                        double_id,
+replace(last_n, 'e', 'Z-')  last_n_replaced,
+upper(course)               course,
+length(course)              letters_in_course,
+cost + score                some_thing
+FROM table1
+ORDER BY 1
+```
+- will create a col called double_id after we doubled each id
+- replace each row in that col last_n, will replace e with Z-
+- upper will make a col with upper case letter etc
+- etc.
+- and the end we order by the first COL which is double id
