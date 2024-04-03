@@ -444,3 +444,28 @@ ORDER BY 1
 - upper will make a col with upper case letter etc
 - etc.
 - and the end we order by the first COL which is double id
+
+- CASE WHEN
+```
+SELECT DISTINCT course,
+CASE course
+    WHEN 'math' THEN 'Hard'
+    WHEN 'history' THEN 'Easy'
+    ELSE 'NA'
+    END level
+FROM table1
+```
+- the name of the new col will be level (after END)
+
+```
+SELECT id, last_n, first_n,
+course, score,
+CASE
+    WHEN score > 95 THEN 'High'
+    WHEN score > 80 AND score <= 95 THEN 'Medium'
+    WHEN score > 70 AND score <= 80 THEN 'Low'
+    ELSE 'Very Low'
+END rate
+FROM table1
+```
+
