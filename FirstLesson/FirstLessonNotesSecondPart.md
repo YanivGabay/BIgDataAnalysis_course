@@ -169,3 +169,117 @@ ORDER BY 3,6,1
 - all the equals will be sorted by the 6th col (which is cost)
 - if there are still equals sort by the first col (which is ID)
 - we can use the names of the cols of the number of the cols
+- we MUST PAY,  that the 3,6,1 are only for the COLS we SELECTED and not the orignal, that why this syntax is NOT reccomended
+- Preferably we will use the name of the cols it is better
+
+- ASC | DESC
+```
+SELECT *
+FROM table1
+ORDER BY id DESC
+``` 
+```
+SELECT *
+FROM table1
+ORDER BY score ASC
+```
+- we can use order by with ASC and DESC in the arguemnts
+```
+SELECT DISTINCT last_n, first_n, age
+FROM table1
+ORDER BY last_n ASC, age DESC
+```
+- LIMIT limit at the end, will limit the results for 3 rows
+at the of the experession
+```
+SELECT id, last_n, first_n,
+to_date, course
+FROM table1
+ORDER BY id
+LIMIT 3
+```
+- without ORDER BY, we can get 3 different results each time, cus we dont know how the table is ordered etc, and we dont know what the from will give us back with limit 3, pay attenion we order by a unique id, so we will always get the same results with the LIMIT 3 command
+- LIMIT with ,
+```
+SELECT id, last_n, first_n,
+to_date, course
+FROM table1
+ORDER BY id DESC
+LIMIT 2,5
+```
+- so the above example from the second row (after we orderedby) get us 5 rows from that.
+- important, limit starts from 0,
+- better to use offset
+- OFFSET
+```
+SELECT id, last_n, first_n,
+to_date, course
+FROM table1
+ORDER BY id
+LIMIT 2 OFFSET 5
+```
+- above example much more readable,orderby need to be UNIQUE if we want to get the same results each time and not random
+
+- STRING CONCAT, this will return us a table, will give us a single col forn first_n and ' ' and last_n, and we also added 3 to the age in the new table we got (not the original)
+```
+SELECT first_n || ' ' || last_n, age+3
+FROM table1
+ORDER BY 1
+```
+- order by 1 here is by (id)
+
+- if we want to add this new col, to the current full table
+```
+SELECT *, first_n || ' --> ' || course
+FROM table1
+ORDER BY id
+```
+- the above example, will return a view with * (all the cols) and the new additional new course
+
+-COLUMN NAMES
+```
+SELECT first_n AS name,
+    'student' AS type,
+    (cost * score) AS some_calc
+FROM table1
+ORDER BY 1
+```
+- basicly, take the string student, and put it on a new col called type (page47)
+
+
+- we dont have to use AS
+- we select, the first col and give it a new name
+- than we get a value, into a new col called points
+- and than we take each cost, double by 2, and put in a col called double cost
+```
+SELECT first_n name,
+    17 points,
+    (cost * 2) "double cost"
+FROM table1
+ORDER BY 1
+```
+
+- Table Name
+```
+SELECT table1.first_n   name,
+table1.cost + 6  new_cost
+FROM table1
+ORDER BY 1
+```
+- we tell him specificly from taht table, take that specific col.
+- and we change the names of the new cols to name and new_cost.
+
+- in this example, we first call table1 students, so we can call it much more readble.
+```
+SELECT students.first_n   name,
+students.cost + 6  new_cost
+FROM table1 AS students
+ORDER BY 1
+```
+- this acts just the same
+```
+SELECT students.first_n   name,
+students.cost + 6  new_cost
+FROM table1 students
+ORDER BY 1
+```
