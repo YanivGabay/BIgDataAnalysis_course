@@ -82,9 +82,9 @@ def execute_and_print_query(query,query_num,db,output_file=None):
         print(f"An error occurred while executing or printing the query: {e}")
 def create_file(file_name):
     try:
-        with open(file_name, 'w') as file:
-            file.write("Yaniv Gabay 205745615\n")
-            file.write("---SQL Queries and Results----\n")
+        file = open(file_name, 'w') 
+        file.write("Yaniv Gabay 205745615\n")
+        file.write("---SQL Queries and Results----\n")
         return file
     except Exception as e:
         print(f"An error occurred while creating the file: {e}")
@@ -293,7 +293,7 @@ def main():
 
     ]
     
-    to_create_file = True
+    to_create_file = False
     if to_create_file:
         file_name = create_file("output.txt")
         if file_name:
