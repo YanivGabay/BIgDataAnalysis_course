@@ -48,24 +48,32 @@ class DatabaseHandler:
 def replace_na(df):
     return df.fillna('Unknown')
 
-def execute_and_print_query(query,query_num,db):
+def execute_and_print_query(query,query_num,db,output_file=None):
     try:
         df = db.execute_query(query)
-
-        # Replace NaN values with 'Unknown' for better readability
-        # Doesnt mess with the original data
+       # Replace NaN values with 'Unknown' for better readability
+       # Doesnt mess with the original data
         df = replace_na(df)
-        print("=" * 55)
-        print(f"Question: {query_num}")
-        print("The query is:")
-        print(query)
-        print(f"Total Rows: {len(df)}")
-        print("First 5 rows:")
-        print(df.head())
+        
+        
+        output = f"{'=' * 55}\n"
+        output += f"Question: {query_num}\n"
+        output += "The query is:\n"
+        output += f"{query}\n"
+        output += f"Total Rows: {len(df)}\n"
+        output += "First 5 rows:\n"
+        output += f"{df.head()}\n\n"
 
         if len(df) > 5:
-            print("Last 5 rows:")
-            print(df.tail())
+            output += "Last 5 rows:\n"
+            output += f"{df.tail()}\n"
+
+        # Print to console
+        print(output)
+
+        # Write to file if specified
+        if output_file:
+            output_file.write(output)
         
     except Exception as e:
         print(f"An error occurred while executing or printing the query: {e}")
