@@ -109,7 +109,27 @@ queries = [
     SELECT name
     from country
     WHERE indepyear IN (1970,1980,1990)
+    """,
     """
+    SELECT name
+    from country
+    WHERE indepyear = (1980 AND 1990) 
+    """,
+    """
+    SELECT name
+    from country
+    WHERE indepyear BETWEEN 1980 AND 1990
+    """,
+    """
+    SELECT name
+    from country
+    WHERE ((indepyear IS 1980) AND (continent = 'Africa'))
+    """,
+    """
+    SELECT name
+    from country
+    WHERE ((indepyear IS 1980) OR (continent = 'Africa'))
+    """,
 ]
 
 
