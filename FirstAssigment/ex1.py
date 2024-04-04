@@ -100,7 +100,16 @@ queries = [
     FROM city
     WHERE (population > 3000000 AND countrycode = 'BRA')
     """,
-
+    """
+    SELECT name
+    from city
+    WHERE population BETWEEN 150000 AND 170000
+    """,
+    """
+    SELECT name
+    from country
+    WHERE indepyear IN (1970,1980,1990)
+    """
 ]
 
 
