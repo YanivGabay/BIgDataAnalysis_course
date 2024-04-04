@@ -16,7 +16,7 @@
 from sqlalchemy import create_engine,exc,text
 import pandas as pd
 import os
-import sqlite3
+
 
 class DatabaseHandler:
     def __init__(self,db_url):
@@ -294,7 +294,7 @@ def main():
     ]
     
     to_create_file = False
-    if to_create_file:
+    if to_create_file:#error handling inside the function
         file_name = create_file("output.txt")
         if file_name:
             print(f"Results will be written to '{file_name}'\n")
