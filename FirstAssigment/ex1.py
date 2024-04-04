@@ -233,7 +233,37 @@ queries = [
         population_density DESC,
         name ASC
     """,
+    """
+    SELECT name,
+           population/surfacearea as 'population_density',
+           population,surfacearea,
+           code
+    FROM country
+    WHERE population_density > 2000
+    ORDER BY
+        code ASC
+    """,
+    """
+    SELECT name,continent,surfacearea
+    FROM country
+    ORDER BY continent ASC,surfacearea DESC
+    """,
+    #30-31
+    """
+    SELECT name
+    FROM country
+    WHERE LENGTH(name) < 10 
+    AND name NOT LIKE 'N%'
+    """,
+    """
+    SELECT name,indepyear
+    FROM country
+    WHERE indepyear IS NULL
+    """
+   
 
+
+    
 
 
     
