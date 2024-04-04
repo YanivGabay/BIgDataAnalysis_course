@@ -206,7 +206,7 @@ queries = [
         name ASC
     LIMIT 10 
     """,
-     #didnt understand this questio, what does "יבשת והאזור בסוגריים" means?
+     #didnt understand this question, what does "יבשת והאזור בסוגריים" means?
     """
     SELECT name country_name,
            continent || '-' || region AS 'continent-region'
@@ -214,6 +214,28 @@ queries = [
     ORDER BY
         country_name ASC
     """,
+    """
+    SELECT name,
+    round(population/1000000,2) as 'population in millions'
+    FROM country
+    WHERE name LIKE 'Z%'
+    
+    """,
+    """
+    SELECT name,GNP,GNPOLD
+    FROM country
+    WHERE GNP > (GNPOLD*2)
+    """,
+    """
+    SELECT name,population/surfacearea as 'population_density',population,surfacearea
+    FROM country
+    ORDER BY
+        population_density DESC,
+        name ASC
+    """,
+
+
+
     
     
      
