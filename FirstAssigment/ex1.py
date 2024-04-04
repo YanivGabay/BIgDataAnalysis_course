@@ -108,75 +108,75 @@ queries = [
     """,
     """
     SELECT name
-    from city
+    FROM city
     WHERE population BETWEEN 150000 AND 170000
     """,
     """
     SELECT name
-    from country
+    FROM country
     WHERE indepyear IN (1970,1980,1990)
     """,
     """
     SELECT name
-    from country
+    FROM country
     WHERE indepyear = (1980 AND 1990) 
     """,
     """
     SELECT name
-    from country
+    FROM country
     WHERE indepyear BETWEEN 1980 AND 1990
     """,
     #11-20
     """
     SELECT name
-    from country
+    FROM country
     WHERE ((indepyear IS 1980) AND (continent = 'Africa'))
     """,
     """
     SELECT name
-    from country
+    FROM country
     WHERE ((indepyear IS 1980) OR (continent = 'Africa'))
     """,
     """
     SELECT name
-    from country
+    FROM country
     WHERE continent IS 'Asia'
     """,
     """
     SELECT name
-    from country
+    FROM country
     WHERE continent IS NOT 'Asia'
     """,
      """
     SELECT name
-    from country
+    FROM country
     WHERE continent NOT IN ('Asia','Europe')
     """,
     """
     SELECT name
-    from city
+    FROM city
     WHERE name LIKE 'H%'
     """,
      """
     SELECT name
-    from city
+    FROM city
     WHERE name NOT LIKE '%e%'
     """,
     """
     SELECT DISTINCT language
-    from countrylanguage
+    FROM countrylanguage
     ORDER BY language
     """,
     """
     SELECT name,indepyear
-    from country
+    FROM country
     ORDER BY
       indepyear ASC,
       name ASC
     """,
     """
     SELECT name,lifeexpectancy
-    from country
+    FROM country
     ORDER BY
         lifeexpectancy DESC,
         name ASC
@@ -184,20 +184,40 @@ queries = [
     #21-30
     """
     SELECT name,GNP
-    from country
+    FROM country
     ORDER BY
         GNP DESC,
         name ASC
     LIMIT 10
     """,
     """
-      SELECT name,GNP
-    from country
+    SELECT name,GNP
+    FROM country
     ORDER BY
         GNP DESC,
         name ASC
     LIMIT 10 OFFSET 10
+    """,
     """
+    SELECT name,GNP
+    FROM country
+    ORDER BY
+        GNP ASC,
+        name ASC
+    LIMIT 10 
+    """,
+     #didnt understand this questio, what does "יבשת והאזור בסוגריים" means?
+    """
+    SELECT name country_name,
+           continent || '-' || region AS 'continent-region'
+    FROM country
+    ORDER BY
+        country_name ASC
+    """,
+    
+    
+     
+
     
     
    
