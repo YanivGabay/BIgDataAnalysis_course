@@ -130,6 +130,43 @@ queries = [
     from country
     WHERE ((indepyear IS 1980) OR (continent = 'Africa'))
     """,
+    """
+    SELECT name
+    from country
+    WHERE continent IS 'Asia'
+    """,
+    """
+    SELECT name
+    from country
+    WHERE continent IS NOT 'Asia'
+    """,
+     """
+    SELECT name
+    from country
+    WHERE continent NOT IN ('Asia','Europe')
+    """,
+    """
+    SELECT name
+    from city
+    WHERE name LIKE 'H%'
+    """,
+     """
+    SELECT name
+    from city
+    WHERE name NOT LIKE '%e%'
+    """,
+    """
+    SELECT DISTINCT language
+    from countrylanguage
+    ORDER BY language
+    """,
+    """
+    SELECT name,indepyear
+    from country
+    
+    
+    
+
 ]
 
 
