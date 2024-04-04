@@ -45,11 +45,16 @@ class DatabaseHandler:
             tables = [row[0] for row in result]
         return tables
 
+def replace_na(df):
+    return df.fillna('Unknown')
 
 def execute_and_print_query(query,query_num,db):
     try:
         df = db.execute_query(query)
-        
+
+        # Replace NaN values with 'Unknown' for better readability
+        # Doesnt mess with the original data
+        df = replace_na(df)
         print("=" * 55)
         print(f"Question: {query_num}")
         print("The query is:")
@@ -70,6 +75,7 @@ db_handler = DatabaseHandler('sqlite:///World.db3')
 print(db_handler.list_tables())
 
 queries = [
+    #1-10
     """
     SELECT name
     FROM City
@@ -120,6 +126,7 @@ queries = [
     from country
     WHERE indepyear BETWEEN 1980 AND 1990
     """,
+    #11-20
     """
     SELECT name
     from country
@@ -163,7 +170,38 @@ queries = [
     """
     SELECT name,indepyear
     from country
+    ORDER BY
+      indepyear ASC,
+      name ASC
+    """,
+    """
+    SELECT name,lifeexpectancy
+    from country
+    ORDER BY
+        lifeexpectancy DESC,
+        name ASC
+    """,
+    #21-30
+    """
+    SELECT name,GNP
+    from country
+    ORDER BY
+        GNP DESC,
+        name ASC
+    LIMIT 10
+    """,
+    """
+      SELECT name,GNP
+    from country
+    ORDER BY
+        GNP DESC,
+        name ASC
+    LIMIT 10 OFFSET 10
+    """
     
+    
+   
+
     
     
 
