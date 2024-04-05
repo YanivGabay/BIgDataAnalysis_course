@@ -98,194 +98,194 @@ def main():
     queries = [
         ###1-10###
         """
-        SELECT name
+        SELECT Name
         FROM City
         """,
         
         """
-        SELECT name
+        SELECT Name
         FROM Country
         """,
         
         """
-        SELECT name
+        SELECT Name
         FROM City
-        WHERE CountryCode = 'NLD' 
+        WHERE Countrycode = 'NLD' 
         """,
         """
-        SELECT name
+        SELECT Name
         FROM Country
         WHERE code IN ('LBR','IOT','TKL')
         """,
         """
-        SELECT name
+        SELECT Name
         FROM City
-        WHERE population > 4000000
+        WHERE Population > 4000000
         """,
         """
-        SELECT name
-        FROM city
-        WHERE (population > 3000000 AND countrycode = 'BRA')
+        SELECT Name
+        FROM City
+        WHERE (Population > 3000000 AND Countrycode = 'BRA')
         """,
         """
-        SELECT name
-        FROM city
-        WHERE population BETWEEN 150000 AND 170000
+        SELECT Name
+        FROM City
+        WHERE Population BETWEEN 150000 AND 170000
         """,
         """
-        SELECT name
-        FROM country
-        WHERE indepyear IN (1970,1980,1990)
+        SELECT Name
+        FROM Country
+        WHERE Indepyear IN (1970,1980,1990)
         """,
         """
-        SELECT name
-        FROM country
-        WHERE indepyear = (1980 AND 1990) 
+        SELECT Name
+        FROM Country
+        WHERE Indepyear = (1980 AND 1990) 
         """,
         """
-        SELECT name
-        FROM country
-        WHERE indepyear BETWEEN 1980 AND 1990
+        SELECT Name
+        FROM Country
+        WHERE Indepyear BETWEEN 1980 AND 1990
         """,
 
         ###11-20###
 
         """
-        SELECT name
-        FROM country
-        WHERE ((indepyear IS 1980) AND (continent = 'Africa'))
+        SELECT Name
+        FROM Country
+        WHERE ((Indepyear IS 1980) AND (continent = 'Africa'))
         """,
         """
-        SELECT name
-        FROM country
-        WHERE ((indepyear IS 1980) OR (continent = 'Africa'))
+        SELECT Name
+        FROM Country
+        WHERE ((Indepyear IS 1980) OR (continent = 'Africa'))
         """,
         """
-        SELECT name
-        FROM country
+        SELECT Name
+        FROM Country
         WHERE continent IS 'Asia'
         """,
         """
-        SELECT name
-        FROM country
+        SELECT Name
+        FROM Country
         WHERE continent IS NOT 'Asia'
         """,
         """
-        SELECT name
-        FROM country
+        SELECT Name
+        FROM Country
         WHERE continent NOT IN ('Asia','Europe')
         """,
         """
-        SELECT name
-        FROM city
-        WHERE name LIKE 'H%'
+        SELECT Name
+        FROM City
+        WHERE Name LIKE 'H%'
         """,
         """
-        SELECT name
-        FROM city
-        WHERE name NOT LIKE '%e%'
+        SELECT Name
+        FROM City
+        WHERE Name NOT LIKE '%e%'
         """,
         """
-        SELECT DISTINCT language
-        FROM countrylanguage
-        ORDER BY language
+        SELECT DISTINCT Language
+        FROM Countrylanguage
+        ORDER BY Language
         """,
         """
-        SELECT name,indepyear
-        FROM country
+        SELECT Name,Indepyear
+        FROM Country
         ORDER BY
-        indepyear ASC,
-        name ASC
+        Indepyear ASC,
+        Name ASC
         """,
         """
-        SELECT name,lifeexpectancy
-        FROM country
+        SELECT Name,lifeexpectancy
+        FROM Country
         ORDER BY
             lifeexpectancy DESC,
-            name ASC
+            Name ASC
         """,
 
         ###21-30###
 
         """
-        SELECT name,GNP
-        FROM country
+        SELECT Name,GNP
+        FROM Country
         ORDER BY
             GNP DESC,
-            name ASC
+            Name ASC
         LIMIT 10
         """,
         """
-        SELECT name,GNP
-        FROM country
+        SELECT Name,GNP
+        FROM Country
         ORDER BY
             GNP DESC,
-            name ASC
+            Name ASC
         LIMIT 10 OFFSET 10
         """,
         """
-        SELECT name,GNP
-        FROM country
+        SELECT Name,GNP
+        FROM Country
         ORDER BY
             GNP ASC,
-            name ASC
+            Name ASC
         LIMIT 10 
         """,
         ##didnt understand this question, what does "יבשת והאזור בסוגריים" means?
         """
-        SELECT name country_name,
-            continent || '-' || region AS 'continent-region'
-        FROM country
+        SELECT Name Country_Name,
+            Continent || '-' || Region AS 'continent-region'
+        FROM Country
         ORDER BY
-            country_name ASC
+            Country_Name ASC
         """,
         """
-        SELECT name,
-        round(population/1000000,2) as 'population in millions'
-        FROM country
-        WHERE name LIKE 'Z%'
+        SELECT Name,
+        round(Population/1000000,2) as 'Population in millions'
+        FROM Country
+        WHERE Name LIKE 'Z%'
         
         """,
         """
-        SELECT name,GNP,GNPOLD
-        FROM country
+        SELECT Name,GNP,GNPOLD
+        FROM Country
         WHERE GNP > (GNPOLD*2)
         """,
         """
-        SELECT name,population/surfacearea as 'population_density',population,surfacearea
-        FROM country
+        SELECT Name,Population/Surfacearea as 'Population_density',Population,Surfacearea
+        FROM Country
         ORDER BY
-            population_density DESC,
-            name ASC
+            Population_density DESC,
+            Name ASC
         """,
         """
-        SELECT name,
-            population/surfacearea as 'population_density',
-            population,surfacearea,
+        SELECT Name,
+            Population/Surfacearea as 'Population_density',
+            Population,Surfacearea,
             code
-        FROM country
-        WHERE population_density > 2000
+        FROM Country
+        WHERE Population_density > 2000
         ORDER BY
             code ASC
         """,
         """
-        SELECT name,continent,surfacearea
-        FROM country
-        ORDER BY continent ASC,surfacearea DESC
+        SELECT Name,Continent,Surfacearea
+        FROM Country
+        ORDER BY Continent ASC,Surfacearea DESC
         """,
 
         ###30-31###
 
         """
-        SELECT name
-        FROM country
-        WHERE LENGTH(name) < 10 
-        AND name NOT LIKE 'N%'
+        SELECT Name
+        FROM Country
+        WHERE LENGTH(Name) < 10 
+        AND Name NOT LIKE 'N%'
         """,
         """
-        SELECT name,indepyear
-        FROM country
-        WHERE indepyear IS NULL
+        SELECT Name,Indepyear
+        FROM Country
+        WHERE Indepyear IS NULL
         """
     
 
