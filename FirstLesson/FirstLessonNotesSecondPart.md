@@ -456,7 +456,7 @@ CASE course
 FROM table1
 ```
 - the name of the new col will be level (after END)
-
+- page 73
 ```
 SELECT id, last_n, first_n,
 course, score,
