@@ -4,7 +4,7 @@ Yaniv Gabay 205745615
 Question: 1
 The query is:
 
-        SELECT name
+        SELECT Name
         FROM City
         
 Total Rows: 4079
@@ -27,7 +27,7 @@ Last 5 rows:
 Question: 2
 The query is:
 
-        SELECT name
+        SELECT Name
         FROM Country
         
 Total Rows: 239
@@ -50,9 +50,9 @@ Last 5 rows:
 Question: 3
 The query is:
 
-        SELECT name
+        SELECT Name
         FROM City
-        WHERE CountryCode = 'NLD' 
+        WHERE Countrycode = 'NLD' 
         
 Total Rows: 28
 First 5 rows:
@@ -74,7 +74,7 @@ Last 5 rows:
 Question: 4
 The query is:
 
-        SELECT name
+        SELECT Name
         FROM Country
         WHERE code IN ('LBR','IOT','TKL')
         
@@ -89,14 +89,14 @@ First 5 rows:
 Question: 5
 The query is:
 
-        SELECT name
+        SELECT Name
         FROM City
-        WHERE population > 4000000
+        WHERE Population > 4000000
         
 Total Rows: 33
 First 5 rows:
                 Name
-0          SÃ£o Paulo
+0          São Paulo
 1     Rio de Janeiro
 2             London
 3  Santiago de Chile
@@ -113,23 +113,23 @@ Last 5 rows:
 Question: 6
 The query is:
 
-        SELECT name
-        FROM city
-        WHERE (population > 3000000 AND countrycode = 'BRA')
+        SELECT Name
+        FROM City
+        WHERE (Population > 3000000 AND Countrycode = 'BRA')
         
 Total Rows: 2
 First 5 rows:
              Name
-0       SÃ£o Paulo
+0       São Paulo
 1  Rio de Janeiro
 
 =======================================================
 Question: 7
 The query is:
 
-        SELECT name
-        FROM city
-        WHERE population BETWEEN 150000 AND 170000
+        SELECT Name
+        FROM City
+        WHERE Population BETWEEN 150000 AND 170000
         
 Total Rows: 250
 First 5 rows:
@@ -137,7 +137,7 @@ First 5 rows:
 0           Breda
 1       Apeldoorn
 2        Nijmegen
-3  Sidi Bel AbbÃ¨s
+3  Sidi Bel Abbès
 4          Huambo
 
 Last 5 rows:
@@ -151,9 +151,9 @@ Last 5 rows:
 Question: 8
 The query is:
 
-        SELECT name
-        FROM country
-        WHERE indepyear IN (1970,1980,1990)
+        SELECT Name
+        FROM Country
+        WHERE Indepyear IN (1970,1980,1990)
         
 Total Rows: 7
 First 5 rows:
@@ -175,9 +175,9 @@ Last 5 rows:
 Question: 9
 The query is:
 
-        SELECT name
-        FROM country
-        WHERE indepyear = (1980 AND 1990) 
+        SELECT Name
+        FROM Country
+        WHERE Indepyear = (1980 AND 1990) 
         
 Total Rows: 0
 First 5 rows:
@@ -189,9 +189,9 @@ Index: []
 Question: 10
 The query is:
 
-        SELECT name
-        FROM country
-        WHERE indepyear BETWEEN 1980 AND 1990
+        SELECT Name
+        FROM Country
+        WHERE Indepyear BETWEEN 1980 AND 1990
         
 Total Rows: 9
 First 5 rows:
@@ -213,9 +213,9 @@ Last 5 rows:
 Question: 11
 The query is:
 
-        SELECT name
-        FROM country
-        WHERE ((indepyear IS 1980) AND (continent = 'Africa'))
+        SELECT Name
+        FROM Country
+        WHERE ((Indepyear IS 1980) AND (continent = 'Africa'))
         
 Total Rows: 1
 First 5 rows:
@@ -226,9 +226,9 @@ First 5 rows:
 Question: 12
 The query is:
 
-        SELECT name
-        FROM country
-        WHERE ((indepyear IS 1980) OR (continent = 'Africa'))
+        SELECT Name
+        FROM Country
+        WHERE ((Indepyear IS 1980) OR (continent = 'Africa'))
         
 Total Rows: 59
 First 5 rows:
@@ -250,8 +250,8 @@ Last 5 rows:
 Question: 13
 The query is:
 
-        SELECT name
-        FROM country
+        SELECT Name
+        FROM Country
         WHERE continent IS 'Asia'
         
 Total Rows: 51
@@ -274,8 +274,8 @@ Last 5 rows:
 Question: 14
 The query is:
 
-        SELECT name
-        FROM country
+        SELECT Name
+        FROM Country
         WHERE continent IS NOT 'Asia'
         
 Total Rows: 188
@@ -298,8 +298,8 @@ Last 5 rows:
 Question: 15
 The query is:
 
-        SELECT name
-        FROM country
+        SELECT Name
+        FROM Country
         WHERE continent NOT IN ('Asia','Europe')
         
 Total Rows: 142
@@ -322,9 +322,9 @@ Last 5 rows:
 Question: 16
 The query is:
 
-        SELECT name
-        FROM city
-        WHERE name LIKE 'H%'
+        SELECT Name
+        FROM City
+        WHERE Name LIKE 'H%'
         
 Total Rows: 159
 First 5 rows:
@@ -346,9 +346,9 @@ Last 5 rows:
 Question: 17
 The query is:
 
-        SELECT name
-        FROM city
-        WHERE name NOT LIKE '%e%'
+        SELECT Name
+        FROM City
+        WHERE Name NOT LIKE '%e%'
         
 Total Rows: 2517
 First 5 rows:
@@ -370,9 +370,9 @@ Last 5 rows:
 Question: 18
 The query is:
 
-        SELECT DISTINCT language
-        FROM countrylanguage
-        ORDER BY language
+        SELECT DISTINCT Language
+        FROM Countrylanguage
+        ORDER BY Language
         
 Total Rows: 459
 First 5 rows:
@@ -394,11 +394,11 @@ Last 5 rows:
 Question: 19
 The query is:
 
-        SELECT name,indepyear
-        FROM country
+        SELECT Name,Indepyear
+        FROM Country
         ORDER BY
-        indepyear ASC,
-        name ASC
+        Indepyear ASC,
+        Name ASC
         
 Total Rows: 239
 First 5 rows:
@@ -420,11 +420,11 @@ Last 5 rows:
 Question: 20
 The query is:
 
-        SELECT name,lifeexpectancy
-        FROM country
+        SELECT Name,lifeexpectancy
+        FROM Country
         ORDER BY
             lifeexpectancy DESC,
-            name ASC
+            Name ASC
         
 Total Rows: 239
 First 5 rows:
@@ -446,11 +446,11 @@ Last 5 rows:
 Question: 21
 The query is:
 
-        SELECT name,GNP
-        FROM country
+        SELECT Name,GNP
+        FROM Country
         ORDER BY
             GNP DESC,
-            name ASC
+            Name ASC
         LIMIT 10
         
 Total Rows: 10
@@ -473,11 +473,11 @@ Last 5 rows:
 Question: 22
 The query is:
 
-        SELECT name,GNP
-        FROM country
+        SELECT Name,GNP
+        FROM Country
         ORDER BY
             GNP DESC,
-            name ASC
+            Name ASC
         LIMIT 10 OFFSET 10
         
 Total Rows: 10
@@ -500,11 +500,11 @@ Last 5 rows:
 Question: 23
 The query is:
 
-        SELECT name,GNP
-        FROM country
+        SELECT Name,GNP
+        FROM Country
         ORDER BY
             GNP ASC,
-            name ASC
+            Name ASC
         LIMIT 10 
         
 Total Rows: 10
@@ -527,15 +527,15 @@ Last 5 rows:
 Question: 24
 The query is:
 
-        SELECT name country_name,
-            continent || '-' || region AS 'continent-region'
-        FROM country
+        SELECT Name Country_Name,
+            Continent || '-' || Region AS 'continent-region'
+        FROM Country
         ORDER BY
-            country_name ASC
+            Country_Name ASC
         
 Total Rows: 239
 First 5 rows:
-     country_name                continent-region
+     Country_Name                continent-region
 0     Afghanistan  Asia-Southern and Central Asia
 1         Albania          Europe-Southern Europe
 2         Algeria          Africa-Northern Africa
@@ -543,7 +543,7 @@ First 5 rows:
 4         Andorra          Europe-Southern Europe
 
 Last 5 rows:
-       country_name        continent-region
+       Country_Name        continent-region
 234  Western Sahara  Africa-Northern Africa
 235           Yemen        Asia-Middle East
 236      Yugoslavia  Europe-Southern Europe
@@ -553,15 +553,15 @@ Last 5 rows:
 Question: 25
 The query is:
 
-        SELECT name,
-        round(population/1000000,2) as 'population in millions'
-        FROM country
-        WHERE name LIKE 'Z%'
+        SELECT Name,
+        round(Population/1000000,2) as 'Population in millions'
+        FROM Country
+        WHERE Name LIKE 'Z%'
         
         
 Total Rows: 2
 First 5 rows:
-       Name  population in millions
+       Name  Population in millions
 0    Zambia                     9.0
 1  Zimbabwe                    11.0
 
@@ -569,8 +569,8 @@ First 5 rows:
 Question: 26
 The query is:
 
-        SELECT name,GNP,GNPOLD
-        FROM country
+        SELECT Name,GNP,GNPOLD
+        FROM Country
         WHERE GNP > (GNPOLD*2)
         
 Total Rows: 2
@@ -583,15 +583,15 @@ First 5 rows:
 Question: 27
 The query is:
 
-        SELECT name,population/surfacearea as 'population_density',population,surfacearea
-        FROM country
+        SELECT Name,Population/Surfacearea as 'Population_density',Population,Surfacearea
+        FROM Country
         ORDER BY
-            population_density DESC,
-            name ASC
+            Population_density DESC,
+            Name ASC
         
 Total Rows: 239
 First 5 rows:
-        Name  population_density  Population  SurfaceArea
+        Name  Population_density  Population  SurfaceArea
 0      Macao        26277.777778      473000         18.0
 1     Monaco        22666.666667       34000          1.5
 2  Hong Kong         6308.837209     6782000       1075.0
@@ -599,7 +599,7 @@ First 5 rows:
 4  Gibraltar         4166.666667       25000          6.0
 
 Last 5 rows:
-                                             Name  population_density  Population  SurfaceArea
+                                             Name  Population_density  Population  SurfaceArea
 234                British Indian Ocean Territory                 0.0           0         78.0
 235                   French Southern territories                 0.0           0       7780.0
 236             Heard Island and McDonald Islands                 0.0           0        359.0
@@ -609,18 +609,18 @@ Last 5 rows:
 Question: 28
 The query is:
 
-        SELECT name,
-            population/surfacearea as 'population_density',
-            population,surfacearea,
+        SELECT Name,
+            Population/Surfacearea as 'Population_density',
+            Population,Surfacearea,
             code
-        FROM country
-        WHERE population_density > 2000
+        FROM Country
+        WHERE Population_density > 2000
         ORDER BY
             code ASC
         
 Total Rows: 6
 First 5 rows:
-        Name  population_density  Population  SurfaceArea Code
+        Name  Population_density  Population  SurfaceArea Code
 0  Gibraltar         4166.666667       25000          6.0  GIB
 1  Hong Kong         6308.837209     6782000       1075.0  HKG
 2      Macao        26277.777778      473000         18.0  MAC
@@ -628,7 +628,7 @@ First 5 rows:
 4  Singapore         5771.844660     3567000        618.0  SGP
 
 Last 5 rows:
-                            Name  population_density  Population  SurfaceArea Code
+                            Name  Population_density  Population  SurfaceArea Code
 1                      Hong Kong         6308.837209     6782000       1075.0  HKG
 2                          Macao        26277.777778      473000         18.0  MAC
 3                         Monaco        22666.666667       34000          1.5  MCO
@@ -638,9 +638,9 @@ Last 5 rows:
 Question: 29
 The query is:
 
-        SELECT name,continent,surfacearea
-        FROM country
-        ORDER BY continent ASC,surfacearea DESC
+        SELECT Name,Continent,Surfacearea
+        FROM Country
+        ORDER BY Continent ASC,Surfacearea DESC
         
 Total Rows: 239
 First 5 rows:
@@ -662,10 +662,10 @@ Last 5 rows:
 Question: 30
 The query is:
 
-        SELECT name
-        FROM country
-        WHERE LENGTH(name) < 10 
-        AND name NOT LIKE 'N%'
+        SELECT Name
+        FROM Country
+        WHERE LENGTH(Name) < 10 
+        AND Name NOT LIKE 'N%'
         
 Total Rows: 145
 First 5 rows:
@@ -687,9 +687,9 @@ Last 5 rows:
 Question: 31
 The query is:
 
-        SELECT name,indepyear
-        FROM country
-        WHERE indepyear IS NULL
+        SELECT Name,Indepyear
+        FROM Country
+        WHERE Indepyear IS NULL
         
 Total Rows: 47
 First 5 rows:
