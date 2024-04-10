@@ -35,9 +35,10 @@ FROM courses;
 -- if we want to choose specific cols
 WHERE course in ('SQL', 'Python');
 ```
+here we say the col, and the value it equal too
 
 ``` 
-here we say the col, and the value it equal too
+
 SELECT * 
 CASE course
     WHEN course = 'SQL' THEN 'Data'
@@ -48,8 +49,9 @@ FROM courses;
 -- if we want to choose specific cols
 WHERE course NOT in ('SQL', 'Python');
 ```
-```
 other option is just to just write case:
+```
+
 SELECT id, last_n, first_n,
 course, score,
 CASE
@@ -74,7 +76,7 @@ will count how many rows have a value in to_date col
 and still return a table size of 1 on 1
 ![alt text](image-1.png)
 
-```
+
 if there are empty values, it wont count them, so it makes a different on which col we do the SELECT COUNT()
 same table as before
 ```
@@ -108,7 +110,6 @@ FROM table1
 ```
 this will return a table with 3 cols, the min, avg and max of the score col
 
-```
 ```
 SELECT SUM(cost) , GROUP_CONCAT(course)
 FROM table1
