@@ -276,8 +276,62 @@ FROM table2
 so only the rows that are in table1 and not in table2 will be returned (atleast 1 col need to be diff)
 
 
+### join
 
+![alt text](image-19.png)
 
+```
+SELECT *
+FROM employees as e,works as w -- same as employees e, works w
+
+```
+will basicly concat those tables, basicly multiplication of those tables.
+so for the row with id 1001, we will have 8 rows, concated for each row in the works table
+so for this example we will have 5X8 = 40 rows
+
+another example:
+![alt text](image-20.png)
+```
+SELECT *
+FROM employees as e,works as w
+WHERE e.id = w.id
+```
+so this is much more relvant, and will "delete" the unrelavnt rows we get as a results of the multiplcation.
+so it did cartesian product, and than filtered the rows that are not relavnt
+
+another example:
+![alt text](image-21.png)
+```
+SELECT *
+FROM employees as e
+JOIN works as w
+ON e.id = w.emp_id
+```
+so this is the same as the last example, but this is the more common way to write it.
+better syntax, and more readable
+
+another example:
+![alt text](image-22.png)
+```
+SELECT *
+FROM employees as e
+INNER JOIN works as w
+ON e.id = w.emp_id
+```
+the default one is inner, so its the same as the prvious join
+
+### left join
+![alt text](image-23.png)
+```
+SELECT *
+FROM employees as e
+LEFT JOIN works as w
+ON e.id = w.emp_id
+```
+previosly we didnt got 1005 on the results, cus it wasnt on the first table.
+now we will get it, but the cols from the second table will be null if there is no match, so all the rows from the first table will be returned, and the rows from the second table will be returned if there is a match, if not the cols from the second table will be null
+
+### 3 join
 
 
 
