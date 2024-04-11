@@ -54,12 +54,16 @@ def print_result(query,query_num,df,output_file=None):
     output += "The query is:\n"
     output += f"{query}\n"
     output += f"Total Rows: {len(df)}\n"
-    output += "First 5 rows:\n"
-    output += f"{df.head()}\n\n"
+   
 
-    if len(df) > 5:
+    if len(df) > 10:
+        output += "First 5 rows:\n"
+        output += f"{df.head()}\n\n"
         output += "Last 5 rows:\n"
         output += f"{df.tail()}\n"
+    else:
+        output += "Results (which are less than 10 rows):\n"
+        output += f"{df}\n"    
 
     # Print to console
     print(output)
