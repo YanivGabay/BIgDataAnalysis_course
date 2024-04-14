@@ -12,5 +12,5 @@ Starting from the second lesson, i added screen shots for the relavant slides, i
 
 your are more than welcome, to fork and make merge requests, there could be always mistakes and formatting problems.
 
-
-
+Personally i use VSCODE and this extenstions to view the content:
+1.[Markdown Preview Enchanced](https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced )
