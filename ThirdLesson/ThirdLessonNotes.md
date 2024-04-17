@@ -222,7 +222,168 @@ ORDER BY will order by the SELECT cols, not by the origina cols!!
 ![alt text](image-15.png)
 much more simillar to real life queries we will run
 
+### another example of GROUPBY
+we can group by even 2 groups.
+```sql
+SELECT first_n,last_n,
+        AVG(score),
+        SUM(cost)
+FROM table1
+GROUP BY first_n,last_n
+ORDER BY 1,2
+```
+the results:
+![alt text](image-16.png)
+ 
+ will create a distnict group based on the first and last name
+ very important and useful.
 
+ ### next example
+ ![alt text](image-17.png)
+results:
+![alt text](image-18.png)
+
+same as DISTINCT. 
+
+### Having
+this is like where, but for the group by
+where will help us filter rows.
+having will help us filter groups
+so if course, give us 4 groups of courses,
+having will help us filter those groups, that their count is atleast 1! and we must use AGG functions in the having, cause it is a term on GROUPS and not on ROWS
+```sql
+SELECT course,
+        COUNT(*)
+        AVG(score)
+FROM table1
+GROUP BY course
+HAVING COUNT(*) > 1
+```
+![alt text](image-19.png)
+
+### another example
+we can also use where, but only after the results of the first querry,
+cus where will act even before the group by, so its WRONG to use where before the group by
+```sql
+WITH  count_course AS (
+        SELECT course, COUNT(*) cc, AVG(score)
+        FROM table1
+        GROUP BY course
+)
+SELECT *
+FROM count_course
+WHERE cc > 1
+
+```
+it is the same as the having, but we can use where, after the group by, and not before.
+less usefull,more code,less effiecnt,better to use HAVING
+
+### FILTER
+
+```sql
+SELECT 'age gt 22' kind, 
+    COUNT(*)    val
+FROM table1
+WHERE age > 22
+UNION ALL
+SELECT 'score lt 80' kind, 
+    COUNT(*)      val
+FROM table1
+WHERE score < 80
+```
+this is a query, of how many people are age > 22 and score < 80
+the results is:
+![alt text](image-20.png)
+
+we can do the same with join
+```sql
+SELECT * 
+FROM  ( SELECT COUNT(*) high_age 
+        FROM table1
+        WHERE age > 22 ),
+        ( SELECT COUNT(*) low_score
+        FROM table1
+        WHERE score < 80 )
+```
+this is an invisible join,with the ,
+results:
+![alt text](image-21.png)   
+
+with the join method:
+```sql
+SELECT * 
+FROM  ( SELECT COUNT(*) high_age 
+        FROM table1
+        WHERE age > 22 )
+JOIN  ( SELECT COUNT(*) low_score
+        FROM table1
+        WHERE score < 80 )
+ON True -- or you can write 1 | 1=1 | etc..
+```
+
+results:
+![alt text](image-22.png)   
+
+the filter itself example:
+
+```sql
+SELECT COUNT(*) FILTER (WHERE age > 22) high_age,
+        COUNT(*) FILTER (WHERE score < 80) low_score
+FROM table1
+```
+results:
+![alt text](image-23.png)   
+
+another example:
+now we will do the same as the last example, but with group by
+```sql
+SELECT course,
+        COUNT(*) FILTER (WHERE age > 22) high_age,
+        COUNT(*) FILTER (WHERE score < 80) low_score
+FROM table1
+GROUP BY course
+```
+results:
+![alt text](image-24.png)
+
+### another example
+this is an example, of using the CASE WHEN instead of filter
+if there is a version of SQL without filter.
+so here, we will change the values, and than count
+than we Bypass the filter method.
+```sql
+SELECT course,
+        COUNT(CASE WHEN age > 22 THEN 1 ELSE NULL END) high_age,
+        COUNT(CASE WHEN score < 80 THEN 1 END) low_score
+FROM table1
+GROUP BY course
+```
+results:
+![alt text](image-25.png)
+
+### another example
+this will show us the percentage of the history course from the total score
+```sql
+SELECT 
+    1.0 * SUM(score) / (SELECT SUM(score) FROM table1)
+FROM table1
+WHERE course = 'history'
+```
+Results:
+![alt text](image-26.png)
+
+but we can use the FILTER method, to do the same
+```sql
+SELECT 
+    1.0 * SUM(score) FILTER (WHERE course = 'history') / 
+    SUM(score)
+FROM table1
+```
+
+take the sum of score, where the course is history, and divide it by the sum of all the scores
+
+results:
+![alt text](image-27.png)
 
 
 
