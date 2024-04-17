@@ -387,6 +387,300 @@ results:
 
 
 
+### important note
+very important before trying to write the query
+to try to think how many rows and cols we need
+less? more?
 
+
+### Syntax full
+```sql
+SELECT [DISTINCT] <colms|func|agg|won>      4/6/7/8
+FROM <table> [JOIN <table>]                  1
+WHERE < conditions on rows>                  2
+GROUP BY <columns>                           3
+HAVING <predicate on groups>                 5
+ORDER BY <colums>                            10
+OFFSET <num>                                 11
+LIMIT <num>                                  12
+```
+
+the right col is the order of the actions.
+
+###  SQL QUERY EXECUTION ORDER
+![alt text](image-28.png)
+
+### Q&A
+
+```sql
+SELECT DISTINCT last_n,first_n
+FROM table1
+WHERE course = 'history'
+ORDER BY 1,2
+```
+![alt text](image-29.png)
+
+results:
+![alt text](image-30.png)
+
+### another example
+all those WHO DIDNT DO HISTORY COURSE
+```sql
+SELECT DISTINCT last_n,first_n
+FROM table1
+WHERE course != 'history'
+ORDER BY 1,2
+```
+![alt text](image-31.png)
+results:
+![alt text](image-32.png)
+is not good, cause we have a lot of duplicates, david cohen did history and math, we want those who DIDNT do history
+
+so the better query is: (or the correct one)
+```sql
+SELECT last_n,first_n
+FROM table1
+GROUP BY last_n,first_n
+HAVING COUNT(CASE WHEN course = 'history' THEN 1 END) = 0
+ORDER BY 1,2
+```
+
+results:
+
+![alt text](image-33.png)
+
+so basicly , when there is a group, who has a history course, we will not show them, and we will show only groups, which dont have a history course.
+
+### another example
+All who did history course 2
+```sql
+SELECT last_n,first_n
+FROM table1
+GROUP BY last_n,first_n
+HAVING COUNT(CASE WHEN course = 'history' THEN 1 END) > 0
+ORDER BY 1,2
+```
+results:
+![alt text](image-34.png)
+
+### another example
+How many did not do history course
+```sql
+SELECT COUNT(*)
+FROM table1
+GROUP BY last_n,first_n
+HAVING COUNT(CASE WHEN course = 'history' THEN 1 END) = 0
+```
+results:
+![alt text](image-35.png)   
+results are bad!!!.
+
+we can debug using group_concat
+![alt text](image-36.png)
+
+so we can see the results, and see that the group by is not working as we thought, so we need to change the query
+
+```sql
+WITH  no_history AS (
+        SELECT last_n,first_n
+        FROM table1
+        GROUP BY last_n,first_n
+        HAVING COUNT(CASE WHEN course = 'history' THEN 1 END) = 0
+)
+SELECT count(*) 
+FROM no_history
+```
+this is correct, cus first, we will get all the people who didnt do history, and only than we count them.
+
+the lesson is, we need to split the query to two parts, and not to do everything in one query.
+
+results:
+![alt text](image-37.png)
+
+### another example
+what courses peled chaim did
+![alt text](image-38.png)
+
+```sql
+SELECT DISTINCT course
+FROM table1
+WHERE last_n = 'peled' AND first_n = 'chaim'
+```
+
+results:
+![alt text](image-39.png)
+
+next
+what courses  peled chaim DIDNT do
+so just using NOT name peled is not right, cus there can be duplicates etc.
+so the correct query is:
+```sql
+SELECT DISTINCT course
+FROM table1
+WHERE course NOT IN ( 
+        SELECT DISTINCT course
+        FROM table1
+        WHERE last_n = 'Peled' AND first_n = 'Chaim' )
+ORDER BY 1
+```
+first get us all the courses he first did, and than the disticnt courses which are not in the first query
+
+results:
+![alt text](image-40.png)
+
+another query, to get the same results
+```sql
+SELECT course
+FROM table1
+GROUP BY course
+HAVING COUNT(*) FILTER (WHERE last_n = 'Peled' 
+                        AND first_n = 'Chaim') = 0 
+ORDER BY 1
+```
+here we count, how many times peled chaim did the course, and if it is 0, we will show it.group by is distnict, so we will get the distnict courses
+
+who did math OR history course
+
+```sql
+SELECT DISTINCT last_n,first_n
+FROM table1
+WHERE course = 'math' or course = 'history'
+ORDER BY 1
+```
+results:
+![alt text](image-41.png)
+
+WHO DID MATH AND HISTORY
+this will return empty table
+```sql
+
+SELECT DISTINCT last_n,first_n
+FROM table1
+WHERE course = 'math' and course = 'history'
+ORDER BY 1
+```
+so this is NOT good
+we should do:
+
+```sql
+SELECT last_n,first_n
+FROM table1
+GROUP BY last_n,first_n
+HAVING COUNT(*) FILTER (WHERE course = 'math') > 0 
+AND 
+COUNT(*) FILTER (WHERE course = 'history') > 0
+ORDER BY 1
+```
+results:
+![alt text](image-42.png)
+
+we can do the previous OR history or Math
+we can do it more complicated
+
+
+```sql
+SELECT last_n,first_n
+FROM table1
+GROUP BY last_n,first_n
+HAVING COUNT(*) FILTER (WHERE course = 'math') > 0 
+        OR 
+        COUNT(*) FILTER (WHERE course = 'history') > 0
+ORDER BY 1
+```
+
+its important to look at a person as a group, and than to do the filter on the group, and not on the rows.
+
+results:
+![alt text](image-43.png)
+
+### Average with NULL
+results:
+![alt text](image-44.png)
+
+if we want the average without the nulls values its really nice to use
+COALESCE
+so:
+```sql
+SELECT COUNT(COALESCE(score,0)), AVG(COALESCE(score,0))
+FROM table3
+```
+results:
+![alt text](image-45.png)   
+
+### rolling sum
+
+![alt text](image-46.png)   
+we do self join.
+```sql
+SELECT *
+FROM sales s1 
+JOIN sales s2 
+    ON s1.day >= s2.day
+ORDER BY 1,3
+```
+
+results:
+![alt text](image-47.png)
+
+so for each day, we will get all the previous days.
+
+so to do the rolling sum, we can do:
+```sql
+
+SELECT s1.day, SUM(s2.amount)  
+FROM sales s1 
+JOIN sales s2 
+ON s1.day >= s2.day
+GROUP BY s1.day
+ORDER BY 1
+```
+
+results:
+![alt text](image-48.png)
+
+### advanced example of window function:
+```sql
+SELECT *, 
+    SUM(amount) OVER (ORDER BY day)  
+FROM sales s1 
+ORDER BY 1
+```
+
+we will learn this after pesah
+results:
+![alt text](image-49.png)   
+
+### example something we might think is good but is bad:
+
+![alt text](image-50.png)
+
+works by accident in other SQL servers this will return an error
+
+CONCLUSION:::
+![alt text](image-51.png)
+
+so how to do it
+```sql
+SELECT id,last_n,first_n
+FROM table1
+WHERE score = (SELECT MAX(score) FROM table1)
+```
+![alt text](image-52.png)
+
+some sql servers have max_by functions, which will return the relavnt cols with the results , but we dot have in SQLLITE
+
+### name and id of 2 highest score
+```sql
+SELECT id,last_n,first_n, score
+FROM table1
+ORDER BY score DESC
+LIMIT 2
+```
+results:
+![alt text](image-53.png)   
+
+for the highest just limit 1 etc.
+
+### get MIN MAx IN 2 COLS
 
 
