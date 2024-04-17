@@ -682,5 +682,10 @@ results:
 for the highest just limit 1 etc.
 
 ### get MIN MAx IN 2 COLS
+JUST 2 SELECT
 
+### get MIN MAx IN 2 rows
+UNION
 
+### NEXT LESSON
+### COUNT DUPLICATE LINES 1
