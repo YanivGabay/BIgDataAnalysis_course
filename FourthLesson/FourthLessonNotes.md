@@ -130,3 +130,146 @@ SELECT DISTINCT *
 FROM table1
 ```
 
+also
+![alt text](image-9.png)
+the intersect
+
+![alt text](image-10.png)
+union aswell
+
+this is okay, but we dont see the val
+![alt text](image-11.png)
+
+best solution, is to use group by and max
+![alt text](image-12.png)   
+```sql
+SELECT item,id,MAX(val) val
+FROM table1
+GROUP BY item,id
+```
+this will remove the duplicates, and also give us a selection, if we want the max dup,etc.
+
+### Simulate FULL OUTER JOIN
+
+```sql
+SELECT e.*, w.* 
+FROM employees e
+LEFT JOIN works w
+ON e.id = w.emp_id
+UNION
+SELECT e.*, w.* 
+FROM works w
+LEFT JOIN employees e
+ON e.id = w.emp_id 
+ORDER BY id
+```
+results:
+![alt text](image-13.png)   
+
+### LEFT JOIN - ON VS WHERE
+```sql
+SELECT e.*, w.* 
+FROM employees e
+LEFT JOIN works w
+ON e.id = w.emp_id
+AND proj_id > 10
+```
+the LEFT join, will bring all the rows of the left table, but if we have rows that wont match the condition, they will be null in the values missing, ON is part of the JOIN
+
+another example, but WHERE runs after the join
+
+```sql
+SELECT e.*, w.* 
+FROM employees e
+LEFT JOIN works w
+ON e.id = w.emp_id
+WHERE proj_id > 10
+```
+results:
+![alt text](image-14.png)
+so we can see, the where, will remove nulls, and remove the rows that proj_id is > 10.
+
+at this point, we are moving to the next slide (3)
+### Windows functions
+
+#### OVER
+```sql
+SELECT *, SUM(amount) OVER()
+FROM sales s1
+ORDER BY day,hour
+```
+without the OVER, this querry is ILEGAL (missing group by), but using 
+![alt text](image-15.png)   
+results:
+![alt text](image-16.png)
+so the results, is the sum, of the col we asked, and it will be added on each row.
+its effective, we calc it once the sum, and we add it to each row
+
+another example:
+```sql
+SELECT *,SUM(amount) OVER() as all_sum, 
+        100.0 * amount / SUM(amount) OVER() as percent
+FROM sales s1
+ORDER BY day,hour
+```
+now, we can calculate the percent of each row, in comparison to the total sum
+![alt text](image-17.png)
+
+results:
+![alt text](image-18.png)
+if we wanted to do the same without the over function we could have done:
+```sql
+SELECT *, 
+        100.0 * amount / (SELECT SUM(amount) FROM sales) as percent
+FROM sales s1
+ORDER BY day,hour
+```
+
+
+another example:
+```sql
+SELECT *,
+COUNT(amount) OVER () as count,
+MIN(amount) OVER () as min,
+AVG(amount) OVER () as avg,
+MAX(amount) OVER () as max
+FROM sales s1 
+ORDER BY day, hour
+```
+
+
+![alt text](image-19.png)
+results:
+![alt text](image-20.png)
+
+
+another example:
+```sql
+SELECT *,
+GROUP_CONCAT(day) OVER () as gc_day,
+GROUP_CONCAT(amount) OVER () as gc_amount
+FROM sales s1 
+ORDER BY day, hour
+```
+![alt text](image-21.png)
+
+results:
+![alt text](image-22.png)
+group concat is also working.
+but the general group by, doesnt work on the window functions, and also the window function does the concat, in any way he will do it. 
+
+
+
+### PARTITION BY
+```sql
+SELECT *,
+COUNT(amount) OVER (PARTITION BY day) as count_d,
+MIN(amount) OVER (PARTITION BY day) as min_d,
+AVG(amount) OVER (PARTITION BY day) as avg_d,
+MAX(amount) OVER (PARTITION BY day) as max_d
+FROM sales s1 
+ORDER BY day, hou
+```
+![alt text](image-23.png)
+results:
+![alt text](image-23.png)
