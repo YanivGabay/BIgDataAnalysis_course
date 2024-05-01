@@ -1,6 +1,6 @@
 # Lesson Notes
 
-## second lesson 10.4
+## third lesson 17.4
 
 ## Author's Note
 
