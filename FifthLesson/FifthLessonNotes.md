@@ -436,4 +436,167 @@ will rollback the TRANSACTION
 ![alt text](image-42.png)
 
 
+### OLTP vs OLAP
+we talked about the difference between OLTP and OLAP
+OLTP is online transaction processing, and OLAP is online analytical processing.
+OLTP is used for data entry, and OLAP is used for data analysis.
+
+### Where and Window
+we talked about why we cant use window function in the WHERE clause.
+the WHERE clause is executed before the window function, so we cant use it in the WHERE clause.
+so some versions have QUALIFY
+```sql
+SELECT *
+FROM lag_t
+QUALIFY amount >3 * LAG(amount) OVER (ORDER BY day,hour)
+ORDER BY day, hour
+```
+
+### SQL PARSER AND TRANSLATOR (transpiler)
+we talked about how we can use a parser to translate sql to another language.
+
+http.sqlglot.com
+http.sqlglot in github
+
+SQLGlot is a no dependecy SQL parser and transpiler. It can parse SQL queries and transpile them to other SQL dialects. It can also transpile SQL queries to JSON and YAML.
+
+### View
+we talked about views, and how we can use them to save a query, and use it later.
+
+```sql
+CREATE VIEW sales_view AS
+SELECT *
+FROM sales
+```
+so basicly each time it will create this virtual table, and we can use it later.
+
+it will still be updated when the original table is updated.
+
+### CTAS IS IMPORTANT
+CTAS = Create table as
+we talked about how important is CTAS, and how we can use it to create a table from a query.
+so we create a copy of a table. this will actually create it and save it on the disk.
+its a seperate copy, so if we update the original table, the new table will not be updated.
+we might see SELECT INTO not recommended, but its the same as CTAS.
+
+
+### SQL in cloud for big data1
+we talked about how we can use SQL in the cloud for big data.
+specifically we talked about BigQuery, and how we can use it to run SQL queries on big data.
+
+we can use the sandbox to run queries, and we can use the UI to run queries as well.
+so the cloud.google.com/bigquery is the place to go.
+
+one usefull thing we cn use EXCEPT
+```sql
+SELECT * EXCEPT   --- exccept which cols we want to remove
+```
+we talked about AWS as well, and how we can use it to run SQL queries on big data.
+Amazon Athena is the place to go.
+or Amazon Redshift- which is a warehouse
+
+Snowflake is another place to go.
+
+### modern-sql.com
+we talked about modern-sql.com, and how we can use it to learn more about SQL.
+its like a dictionary for SQL versions, we can see which version has which commands etc.
+
+### sql zoo knnightlab etc
+
+
+### Optimization For Big Data -Theory for now
+
+### Query Optimization - From amazon athena 
+#### Distributed Hash Join
+basicly join is a very expensive operation, so we can use distributed hash join to make it faster.
+it will create a hash table, and then it will join the tables.
+
+one side will be the build side, and the other side will be the probe side.
+the build side will create the hash table, and the probe side will probe the hash table.
+so its pass the hash table between the nodes (this table MUST be the smaller one)
+(only when doing comparsion joins)
+
+if we did do a join on two BIG tables, its will be better,to split the tables to smaller tables, and then union them.
+
+#### Other Join Types
+Queries with complex join conditions for example queries that use LIKE,>,<,!=,IN,OR,AND, etc. can be slow.
+cus it will compare each one.
+these queries can exceeding the maximum execution time.
+
+Explain will tell you how he plan to do certain things.
+Very important , each action cost money in the cloud.
+
+### Optimization Window Functions
+Window functions are very powerful, but they can be slow.
+you can run out of memory.
+first recommendation is :
+reduce the size of the window, to do so, you can add a PARITIONED BY clause or narrow the scope of existing PARTITION BY clause.
+so if we need window of 3 month, we can do it for 1 month, and then do it again for the next month  and union them.
+
+Sometimes queries with window function can e rewritten without window functions.
+for example:
+instead of using row_number, to find the top N records, we can use a subquery with a LIMIT clause etc.
+
+### Optimization - Aggregations
+Important: Avoid including redundant columns in the GROUP BY clause.
+Fewer columns = Less Memory = Faster Query
+
+Numeric Columns also use less memory than strings
+better to agg ids than names etc.
+
+Sometimes queries include columns in the group by clause to work around the fact that a column must either be part of the group by clause or an aggregation expression.
+Its VERY bad for performance.
+Example of this
+```sql
+SELECT * FROM Country
+```
+```sql
+SELECT * FROM Country
+GROUP BY Continent
+```
+```sql
+SELECT Contient,COUNT(*)
+FROM Country
+GROUP BY Continent
+```
+```sql
+--- if we want to see regions
+SELECT Continent,Region,COUNT(*)
+FROM Country
+GROUP BY Continent,Region
+```
+this ill work, but its not good for performance.
+
+this will work,
+```sql
+SELECT Continent,MAX(Region),COUNT(*)
+FROM Country
+GROUP BY Continent
+```
+
+bad example:
+this isuseless
+```sql
+SELECT Continent,continet_id,COUNT(*)
+FROM Country
+GROUP BY Continent,continet_id
+```
+to fix this we can write MAX or Arbitery
+```sql
+SELECT Continent,MAX(continet_id),COUNT(*)
+FROM Country
+GROUP BY Continent
+```
+
+### Optimization - Top N Queries
+the order by clause returns the results of the query in a sorted order.
+!!IF YOU DONT STRICLY NEED YOUR RESULT TO BE SORTED AVOID ADDING AN ORDER BY CLAUSE!!
+also AVOID ADDING ORDER BY TO INNER QUERIES IF THEY ARE NOT STRICLY NECESSARY
+
+
+
+
+
+
+
 
