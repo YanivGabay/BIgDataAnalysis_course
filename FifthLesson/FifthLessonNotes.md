@@ -593,6 +593,32 @@ the order by clause returns the results of the query in a sorted order.
 !!IF YOU DONT STRICLY NEED YOUR RESULT TO BE SORTED AVOID ADDING AN ORDER BY CLAUSE!!
 also AVOID ADDING ORDER BY TO INNER QUERIES IF THEY ARE NOT STRICLY NECESSARY
 
+Include only the required columns
+if you dont need all the columns, dont use them.
+
+### Misc - Optimization
+some have support for approximation aggregate functions, like APPROX_COUNT_DISTINCT, APPROX_PERCENTILE, APPROX_QUANTILE, APPROX_TOP_COUNT
+why? cus sometimes we dont need the exact number, and we can save time and money.
+also %string% is worst than string%
+
+Optimizing LIKE - we can use a regexp than just look for a string.
+
+Use union ALL instead of union, if you dont need to remove duplicates.
+Union all conncatenates the record from the first table to the second table, and union does the same but also removes duplicates.
+union all is actuall a quick operation in contrast to union.
+only if you need to remove duplicates, use union.
+
+### Unload Data
+Unload data to S3 or other storage services.
+we can use unload to save the data to a file, and then we can use it later.
+
+### Cache
+Caching is a technique that stores a copy of data in a cache.
+if we have a query that is used many times, we can cache it, and then we can use it later (results will be faster)
+
+### Partitioning
+we will continue this next week
+
 
 
 
