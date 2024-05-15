@@ -546,7 +546,7 @@ its better to have nither too many files nor too few. because the number of file
 ##### sql commands types
 - DDL - data definition language - create drop alter truncate comment rename
 - DQL - data query language - select
-- DML - data manipulation language -  - insert jpdate delete lock merge
+- DML - data manipulation language -  - insert update delete lock merge
 - DCL - data control language - grant revoke
 - TCL - transaction control language - commit rollback savepoint set transaction
 
