@@ -512,6 +512,44 @@ bucketing is less valueable when queries frequently search for multiple values i
 for example if you have three buckets.
 for example if you have three buckets, and a query looks for three different values, all files might have to be read.
 
+we can inside the partitions, we can use buckets, so we can have a folder for each partition, and inside the partition we can have buckets, so we can have a folder for each bucket, and inside the bucket we can have the files.
+
+#### things to avoid
+- avoid too many files
+- avoid additional storage heirarchies beyond the partition, to avoid qeuery planning overhead, store files in a flatstructure in each partition location. do not use any additional subdirectories.
+
+when it plans a query it lists all files in all partitions, when it lsits partition location it recursivley lists any directory it finds. when files within a parition ar organized into a heirarchy, multiple round of listing occuers.
+when all files are directly in the partition  location, most of the time only the one list opeartion has to be performed.
+
+#### use columnar file formats
+columnar file formats are optimized for read-heavy workloads, and are designed to store data in columns rather than rows.
+
+columnar file formats like Parquet and ORC are highly compressed, and are designed to minimize the amount of data that needs to be read from disk.
+advantages of columnar file formats:
+- only the columns needed for the query are read from disk, which reduces the amount of data that needs to be read.
+- the overall amount of data that needs to be read is reduced, which improves query performance.
+- column values are stores togther, so data can be compressed more effectively, which reduces the amount of disk space needed to store the data.
+- files can contain metadata that allows the engine to skip over large sections of data that are not needed for the query.
+
+as an example of how file metadata can be used, file metadata can contain information about the min and max values of a column, which allows the engine to skip over large sections of data that do not contain the values needed for the query. this can greatly reduce the amount of data that needs to be read from disk, and can improve query performance.
+
+one way to use this metadata to improve performance is to ensure that data within the files are sorted.
+for example, suppose you have queries that look for records where the created_at_entry is within a short time span. if your data is sorted by the created_at column, it can use the minium and maximum values in the file metadata to skip the undeed parts of the data files.
+
+when using columnar file formats, make sure that your files arent too small, avoid having too many files. datasets ith many small files can lead to inefficient query performance, as the query engine has to open and read many files to process the query.
+for smaller files, the overhead of columnar file formats can outweigh the benefits of using them.
+
+Compress data, the gzip format provides a good balance between compression ratio and query performance. the snappy format provides faster compression and decompression, but has a lower compression ratio. the lzo format provides the fastest compression and decompression, but has the lowest compression ratio.
+
+its better to have nither too many files nor too few. because the number of files is the limit for how many workers can process the query, this rule is especially important for compressed file.
+
+##### sql commands types
+- DDL - data definition language - create drop alter truncate comment rename
+- DQL - data query language - select
+- DML - data manipulation language -  - insert jpdate delete lock merge
+- DCL - data control language - grant revoke
+- TCL - transaction control language - commit rollback savepoint set transaction
+
 
 
 
