@@ -361,4 +361,157 @@ db.restaurants.aggregate([
 ```
 first match, than count, will return the total number of documents that match the criteria. (single line)
 
+##### lookup
+the $lookup stage performs a left outer join on two collections in the database. the $lookup stage is used to combine data from two collections, and is used to retrieve related data from a second collection based on a common field in the first collection.
+its the same as join in sql. LEFT JOIN
+left join will bring EVERYTHING from the left table, and only the matching rows from the right table.
+
+example:
+```MongoDB
+db.comments.aggregate([
+    {$lookup: {from: "users", localField: "userId", foreignField: "_id", as: "user"}}
+    {$project: {text: 1, user: 1}}
+    {$limit: 5}
+])
+```
+ localField is the field in the first collection, foreignField is the field in the second collection, as is the name of the field that will be created in the first collection.
+
+ foreignField is the field in the second collection that will be used to match the documents in the first collection.
+
+ 
 ##### unwind
+the $unwind stage deconstructs an array field in the documents in the collection into separate documents. the $unwind stage is used to flatten the data that is returned from the collection, and is used to deconstruct an array field into separate documents.
+in sql it is like unnest
+
+example:
+```MongoDB
+db.clothing.aggregate([
+    {$unwind: {path: "$sizes"}}
+    {$project: {name: 1, sizes: 1}}
+    {$limit: 5}
+])
+```
+
+so we can do unwind, so its will take all the fields we said (sizes) and will basicly unnest the values, one by one
+
+##### sample
+the $sample stage returns a random sample of documents from the collection. the $sample stage is used to retrieve a random sample of documents from the collection, and is used to select a subset of the data that is returned from the collection.
+
+example:
+```MongoDB
+db.movies.aggregate([
+    {$sample: {size: 5}}
+])
+```
+more random lets say than just find limit.
+
+
+##### union with
+
+the $unionWith stage performs a union operation on two collections in the database. the $unionWith stage is used to combine the data from two collections, and is used to retrieve all the documents from both collections, without any duplicates.
+
+example:
+```MongoDB
+db.collection.aggregate([
+    {$project: {name: 1, cuisine: 1}}
+    {$unionWith: {coll: "restaurants", pipeline: [{$project: {name: 1, cuisine: 1}}]}}
+    {$limit: 5}
+])
+```
+we ran another pipeline on the inner collection, and then unioned the results.
+
+##### setWindowFields
+the $setWindowFields stage adds window functions to the documents in the collection. the $setWindowFields stage is used to add window functions to the data that is returned from the collection, and is used to calculate running totals, moving averages, and other window functions on the data.
+
+we wont talked about it, cus its a bit more advanced and the professor said we wont need it.
+
+##### mongoDb Agg
+several links from the presentation
+
+##### mongo db drivers
+we will use python to connect using the pymongo driver, and we will use the mongo shell to connect to the database.
+just go into the pymingo or mongodb documentation and you will find the way to connect to the database.
+
+there is sample data within the pyton, again mongo db DOCS, and you will find the way to connect to the database.
+
+
+that is for mongo db, now we continue with last week lesson, where we stopped on partitioning.
+
+### continued from last week
+#### Partitioning
+
+reminder, never do cross join, it will kill the performance of the database.
+
+windows functions are waste sometimes, so we need to choose the window size wisely.
+
+also do not include columns in the group by that are not needed, it will kill the performance.
+
+order by only if needed
+
+only neccessary columns in the select
+
+like and regexp is faster is most cases.
+
+union all is also more efficient than union.
+
+#### Partitioning
+
+##### partition your data
+partiotning divides your table into parts and keeps the related data togther, based on properties such as date, country, region etc.
+partition keys act as virtual columns you define partition keys at table creating and use them for filtring your queries.
+when you filter on a partition key, the query engine knows which partitions to scan, and which to skip.
+so only data from matching partitions is read.
+the partition are actually folders on disk e.g  /data/year=2022/month=01/day=01
+
+pick patition keys that will support your queries, and that will distribute the data evenly across the partitions.
+beacuse partttioning has significant impact on query performance be sure to choose the right partition key.
+having too many partitions can also slow down your queries, so choose the right number of partitions. will make queries scan more data than needed.
+
+Avoid optimizing for rare queries. optimize for the most common queries!!!!!!!!!
+
+example:
+table of:
+year, month, day, country, region, sales
+2022, 01, 01, US, NY, 100
+2022, 01, 01, US, CA, 200
+2022, 01, 01, UK, LDN, 300
+
+we decide to partition by year, month, day
+so the folder structure will be:
+/data/year=2022/month=01/day=01/file1
+/data/year=2022/month=01/day=02/file2
+/data/year=2022/month=01/day=03/file3
+ etc.
+ maybe
+/data/year=2023/month=01/day=01/file1
+/data/year=2023/month=01/day=02/file2
+
+so if we wanted to query the first day of 2022, we will only scan the first folder, and not the rest of the data.
+
+#### Partitions - cont
+ALWAYS use STRING as the type for partition keys.
+cus it will be translated to the folder structure, and if you use int, it will be translated to a folder with the number as the name, and it will be harder to read.
+
+remove old and empty partitions, to keep the data fresh and the query performance high.
+
+many thousand of paritions consider removing partition metadata for old data that is no longer needed.
+removing unsued partitions can speed up queries that dont include predicate on all partition keys.
+
+query partition by equality, queries that include eequalidy predicates on all partition keys are the most efficient.
+because the partition metadata can be loaded diretly. avoid queries in which one or more of the partition keys does not have predicate.
+
+#### Buckets
+buckets are a way to group data into smaller, more manageable chunks.
+use bucketing for lookups on keys with high cardinality.
+for example suppose you query a set of records for a specific user id, and the user id is a high cardinality key.
+this enbales it to read only the files that can contain the ID, greatly recuding the amount of data that needs to be scanned.
+it also reduces the compute resources needed to process the query.
+
+disadvantages of bucketing:
+bucketing is less valueable when queries frequently search for multiple values in the columns that the data is bucketed by. the more values queried the igher the likelhood that all or most files will have to be read.
+for example if you have three buckets.
+for example if you have three buckets, and a query looks for three different values, all files might have to be read.
+
+
+
+
