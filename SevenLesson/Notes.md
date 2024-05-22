@@ -62,13 +62,13 @@ MATCH (p:Person) // we can also do (persons:Person)// the first variables is the
 RETURN *
 LIMIT 9
 ```
-```cyper
+```cypher
 MATCH (p:Person)
 RETURN p.name, p.born as born
 LIMIT 9
 ```
 
-```cper
+```cypher
 MATCH (p:Person)
 RETURN p //this will allow us to display a graph, cus we display all p
 LIMIT 9
@@ -83,14 +83,70 @@ RETURN p.name, p.born
 ```
 
 ```cypher
+MATCH (p:Person)-[r]->(m:Movie) --any connection will be named r
+WHERE p.name = 'Tom Hanks'
+RETURN *
+LIMIT 9
+```
+
+```cypher
+MATCH (p:Person)-[r:DIRECTED]->(m:Movie) 
+WHERE p.name = 'Tom Hanks'
+RETURN p,m,r -- will return the person, the movie and the relationship
+LIMIT 9
+```
+```cypher
+MATCH (p:Person)-[r:DIRECTED]->(m:Movie) 
+WHERE p.name = 'Tom Hanks'
+RETURN p,m -- so we will not see the relationship,but in the graph we will see the relationship and all of them
+LIMIT 9
+```
+
+```cypher
 MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
 WHERE p.name = 'Tom Hanks'
 RETURN m.title
 ```
 
 ```cypher
+MATCH QQ = ((p:Person)-[:ACTED_IN]->(m:Movie))
+WHERE p.name = 'Tom Hanks'
+RETURN QQ
+```
+```cypher
+MATCH QQ = ((p:Person WHERE p.name = 'Tom Hanks')-[:ACTED_IN]->(m:Movie))
+RETURN QQ
+```
+also another way of syntax
+```cypher
+MATCH p-[:ACTED_IN]->m
+WHERE p:Person AND m:Movie AND p.name = 'Tom Hanks'
+RETURN m.title
+```
+
+if we dont mind what connection type
+this query does NOT return the connections
+```cyper
+MATCH (p:Person)--(m:Movie)
+WHERE p.name = 'Tom Hanks'
+RETURN *
+```
+can or operator on the node label
+```cyper
+MATCH (p:Person|Actor) -- (p:Person|Actor|Director)
+RETURN DISTINCT labels(p)
+```
+
+
+```cypher
 MATCH (p)-[:ACTED_IN]->(m:Movie)
 WHERE p:Person AND m:Movie AND m.title = 'The Matrix'
+return p.name
+```
+helpfull to say which nodes we DONT want to see
+```cypher
+MATCH (p)-[:ACTED_IN]->(m:Movie)
+WHERE p:Person AND NOT m:Movie AND m.title = 'The Matrix'
 return p.name
 ```
 
@@ -99,6 +155,13 @@ MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
 WHERE 2000 <= m.released <= 2003
 RETURN p.name, m.title, m.released
 ```
+to compare strings:
+```cypher
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+WHERE "2000" <= m.released <="2003"
+RETURN p.name, m.title, m.released
+```
+    
     
 ```cypher
 MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
@@ -114,9 +177,30 @@ RETURN p.name, p.born
 ```
 
 ```cypher
-MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+MATCH (p:Person)-[r:ACTED_IN]->(m:Movie)
 WHERE 'Neo' IN r.roles AND m.title = 'The Matrix'
-RETURN p.name, m.title
+RETURN p.name, m.title,r
+```
+```cypher
+MATCH (p:Person)-[r:ACTED_IN]->(m:Movie)
+WHERE m.title = 'The Matrix'
+RETURN p,r,m
+```
+```cypher
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+WHERE  m.title = 'The Matrix'
+RETURN keys(p), labels(p), p.name, p.born
+```
+
+```cypher
+MATCH (p:Person)-[r]-(m:Movie)
+WHERE  m.title = 'The Matrix'
+RETURN DISTINCT type(r),r
+```
+dont care what nodes, return all distinct relationships
+```cypher
+MATCH ()-[r]-()
+RETURN DISTINCT type(r)
 ```
 
 ```cypher
@@ -142,11 +226,49 @@ CALL db.schema.nodeTypeProperties()
 CALL db.schema.relTypeProperties()
 ```
 
+in the next queriy, p is a person
 ```cypher
 MATCH (p:Person)-[:ACTED_IN]->(m:Movie)<-[:DIRECTED]-(p)
 WHERE p.born.year > 1960
 RETURN p.name,p.born,labels(p),m.title
+ORDER BY p.name
 ```
+we can break those chains
+```cypher
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie),
+(p)-[:DIRECTED]->(m)
+WHERE p.born.year > 1960
+RETURN p.name,p.born,labels(p),m.title
+ORDER BY p.name
+```
+
+we can break those chains using two MATCH
+```cypher
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+MATCH (p)-[:DIRECTED]->(m)
+WHERE p.born.year > 1960
+RETURN p.name,p.born,labels(p),m.title
+ORDER BY p.name
+```
+we can use EXPLAIN will return a plan of the query\
+and will not actually execute the query
+```cypher
+EXPLAIN MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+MATCH (p)-[:DIRECTED]->(m)
+WHERE p.born.year > 1960
+RETURN p.name,p.born,labels(p),m.title
+ORDER BY p.name
+```
+we can use PROFILE to see the query plan and the time it took
+will actually execute the query
+```cypher
+PROFILE MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+MATCH (p)-[:DIRECTED]->(m)
+WHERE p.born.year > 1960
+RETURN p.name,p.born,labels(p),m.title
+ORDER BY p.name
+```
+
 
 ```cypher
 MATCH (p:Person)-[r]->(m:Movie)
@@ -181,7 +303,7 @@ RETURN m.title, m.released
     
 ```cypher
 MATCH (m:Movie)
-WHERE m.title CONTAINS 'River'
+WHERE m.title CONTAINS 'River' //if a bigger string contains a smaller string
 RETURN m.title, m.released
 ```
 ```cypher
@@ -193,4 +315,57 @@ RETURN p.name
 MATCH (p:Person)
 WHERE toUpper(p.name) ENDS WITH 'DEMILLE'
 RETURN p.name
+```
+
+### Query Patterns
+```cypher
+MATCH (p:Person)-[:WROTE]->(m:Movie)
+//WHERE NOT exists( (p)-[:DIRECTED]->(m) )
+RETURN p.name, m.title
+```
+```cypher
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+WHERE p.name = 'Tom Hanks'
+AND exists {(p)-[:DIRECTED]->(m)}
+RETURN p.name, labels(p), m.title
+```
+```cypher
+Same - much more efficient:
+
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)<-[:DIRECTED]-(p)
+WHERE p.name = 'Tom Hanks'
+RETURN m.title
+```
+```cypher
+For NOT - must do this:
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+WHERE p.name = 'Tom Hanks'
+AND NOT exists {(p)-[:DIRECTED]->(m)}
+RETURN m.title
+```
+
+### aggregation
+this is the same action as group by (insql)
+```cypher
+MATCH (a:Person)-[:ACTED_IN]->(m:Movie)// WHERE a.name = 'Tom Hanks'
+RETURN a.name AS actorName,
+count(*) AS numMovies
+```
+// 
+Aggregation in Cypher is different from aggregation in SQL. In Cypher, you need not specify a grouping key. As soon as an aggregation function like count() is used, all non-aggregated result columns become grouping keys.The grouping is implicitly done, based upon the fields in the RETURN clause.
+Create list:
+```cypher
+MATCH (p:Person)
+RETURN p.name, [p.born, p.died] AS lifeTime
+LIMIT 10
+```
+```cypher
+MATCH (a:Person)-[:ACTED_IN]->(m:Movie)
+RETURN a.name AS actor,count(*) AS total,collect(m.title) AS movies
+ORDER BY total DESC
+ LIMIT 10
+ ```
+```cypher
+MATCH (a:Person)-[:ACTED_IN]->(m:Movie)WHERE m.year = 1920
+RETURN collect(DISTINCT m.title) AS movies,collect( a.name) AS actors
 ```
