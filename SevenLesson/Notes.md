@@ -10,6 +10,7 @@ in order to see the pictures taken from the presentation, please make sure you c
 ## Previous Lesson Recap
 
 
+
 ### Document Store - Graph DB
 a graph databse stores nodes and relationships instead of tables or documents.
 data is stores just like you might sketch ideas on a whiteboard. your data is stores without restircting to a pre defined model, allowing a ver flexiable way of thinking about and using it.
@@ -50,6 +51,14 @@ so gql (graph query lang) will be a new databse query languange.
 
 ### Graph DB queries tabuler results
 ![alt text](image-10.png)
+
+Example code c++
+```cpp
+void hello()
+{
+    cout <<hello;
+}
+```
 
 ### Graph DB example queries
 will help us see the visualiztion of the data
